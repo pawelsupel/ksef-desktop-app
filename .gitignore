@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+build/
+out/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE & Claude Code
+.vscode/
+.idea/
+.claude/
+*.swp
+*.swo
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Electron
+release/
+*.dmg
+*.exe
+*.zip
+
+# Angular
+.angular/
+angular.json.bak
+
+# Data & Sensitive
+data/
+*.db
+*.sqlite
+ksef.db
+# Never commit these files - CRITICAL for security
+*.env
+.env*
+!.env.example
+.idea/token.md
+.idea/config.md
+*.token
+token.txt
+
+# Release builds (contain bundled data)
+release/
+dist/backend/
+src/backend/dist/
+src/backend/ksef.db
+
+# Temporary/Test
+test-copy/
+*.tmp
+
+# Debug artifacts (may contain PII)
+src/backend/debug-invoice.xml
+src/backend/debug-parsed.json
+src/backend/debug-parsed-manual.json
+src/backend/debug-struktura.json
+src/backend/backend.out
