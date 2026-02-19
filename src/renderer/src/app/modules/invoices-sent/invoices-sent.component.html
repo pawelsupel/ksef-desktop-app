@@ -1,0 +1,165 @@
+<div class="invoices-container">
+  <div class="invoices-header">
+    <h2>Faktury Wysłane</h2>
+    <div class="header-controls">
+      <div class="sort-controls">
+        <button class="sort-btn" [class.active]="sortBy === 'date'" (click)="changeSortBy('date')" title="Sortuj po dacie">
+          📅 Data {{ sortBy === 'date' ? (sortOrder === 'asc' ? '↑' : '↓') : '' }}
+        </button>
+        <button class="sort-btn" [class.active]="sortBy === 'amount'" (click)="changeSortBy('amount')" title="Sortuj po kwocie">
+          💰 Kwota {{ sortBy === 'amount' ? (sortOrder === 'asc' ? '↑' : '↓') : '' }}
+        </button>
+      </div>
+      <button class="view-toggle" (click)="toggleView()" title="Przełącz widok">
+        {{ viewType === 'cards' ? '📋 Lista' : '🔲 Kafelki' }}
+      </button>
+      <button (click)="refresh()" [disabled]="(loading$ | async)">
+        {{ (loading$ | async) ? 'Ładowanie...' : 'Odśwież' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="error$ | async as error" class="error-message">
+    <p>⚠️ {{ error }}</p>
+    <button (click)="clearError()">Zamknij</button>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="loading$ | async" class="loading-spinner">
+    <p>⏳ Pobieranie faktur...</p>
+  </div>
+
+  <!-- Invoices list - Card View -->
+  <div class="invoices-list" *ngIf="!(loading$ | async) && viewType === 'cards'">
+    <div *ngIf="invoices.length === 0" class="empty-state">
+      <p>📭 Brak faktur wysłanych</p>
+    </div>
+
+    <div *ngFor="let invoice of getSortedInvoices()" class="invoice-card" (click)="viewInvoiceDetails(invoice)" [attr.role]="'button'" [attr.tabindex]="'0'">
+      <div class="invoice-header">
+        <h3>{{ invoice.number }}</h3>
+        <span class="status" [class.sent]="invoice.type === 'sent'">{{ invoice.status }}</span>
+      </div>
+
+      <div class="invoice-details">
+        <p><strong>Nabywca:</strong> {{ invoice.buyer?.name || 'N/A' }}</p>
+        <p><strong>NIP:</strong> {{ invoice.buyer?.taxId || 'N/A' }}</p>
+        <p><strong>Data wystawienia:</strong> {{ invoice.issueDate }}</p>
+        <p><strong>Kwota brutto:</strong> {{ invoice.grossAmount || invoice.amount }} {{ invoice.currency }}</p>
+      </div>
+
+      <div class="invoice-footer">
+        <button (click)="downloadPdf(invoice, $event)" class="btn-pdf">📄 PDF</button>
+        <button (click)="downloadXml(invoice, $event)" class="btn-xml">📋 XML</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoices list - List View -->
+  <div class="invoices-table-wrapper" *ngIf="!(loading$ | async) && viewType === 'list'">
+    <div *ngIf="invoices.length === 0" class="empty-state">
+      <p>📭 Brak faktur wysłanych</p>
+    </div>
+
+    <table class="invoices-table" *ngIf="invoices.length > 0">
+      <thead>
+        <tr>
+          <th>Numer faktury</th>
+          <th>Nabywca</th>
+          <th>Data wystawienia</th>
+          <th>Kwota brutto</th>
+          <th>Status</th>
+          <th>Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let invoice of getSortedInvoices()" (click)="viewInvoiceDetails(invoice)" class="invoice-row">
+          <td class="invoice-number">{{ invoice.number }}</td>
+          <td class="buyer">{{ invoice.buyer?.name || 'N/A' }}</td>
+          <td class="issue-date">{{ invoice.issueDate }}</td>
+          <td class="amount">{{ invoice.grossAmount || invoice.amount }} {{ invoice.currency }}</td>
+          <td class="status">
+            <span class="status-badge" [class.sent]="invoice.type === 'sent'">{{ invoice.status }}</span>
+          </td>
+          <td class="actions">
+            <button (click)="downloadPdf(invoice, $event)" class="btn-action" title="Pobierz PDF">📄</button>
+            <button (click)="downloadXml(invoice, $event)" class="btn-action" title="Pobierz XML" style="background: #4CAF50; margin-left: 4px;">📋</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Invoice Details Modal -->
+  <div *ngIf="selectedInvoice" class="modal-overlay" (click)="closeInvoiceDetails()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Szczegóły Faktury</h2>
+        <button class="close-button" (click)="closeInvoiceDetails()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="detail-row">
+          <span class="label">Numer faktury:</span>
+          <span class="value">{{ selectedInvoice.number || 'Brak danych' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Numer KSeF:</span>
+          <span class="value">{{ selectedInvoice.id || 'N/A' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Nabywca:</span>
+          <span class="value">{{ selectedInvoice.buyer?.name || 'N/A' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">NIP Nabywcy:</span>
+          <span class="value">{{ selectedInvoice.buyer?.taxId || 'N/A' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Data wystawienia:</span>
+          <span class="value">{{ selectedInvoice.issueDate || 'N/A' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Termin płatności:</span>
+          <span class="value">{{ selectedInvoice.dueDate || 'N/A' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Kwota netto:</span>
+          <span class="value">{{ (selectedInvoice.netAmount || 'Brak danych') }} {{ selectedInvoice.currency }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Kwota brutto:</span>
+          <span class="value amount">{{ (selectedInvoice.grossAmount || 'Brak danych') }} {{ selectedInvoice.currency }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">VAT:</span>
+          <span class="value">{{ (calculateVat(selectedInvoice) === 0 ? 'Brak danych' : (calculateVat(selectedInvoice) | number: '1.2-2')) }} {{ selectedInvoice.currency }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Status:</span>
+          <span class="value">{{ selectedInvoice.status }}</span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button (click)="downloadPdf(selectedInvoice!, $event)" [disabled]="isDownloadingPdf" class="btn-primary">
+          {{ isDownloadingPdf ? '⏳ Pobieranie...' : '📄 Pobierz PDF' }}
+        </button>
+        <button (click)="downloadXml(selectedInvoice!, $event)" [disabled]="isDownloadingPdf" class="btn-secondary" style="background: #4CAF50;">
+          {{ isDownloadingPdf ? '⏳ Pobieranie...' : '📋 Pobierz XML' }}
+        </button>
+        <button (click)="closeInvoiceDetails()" class="btn-secondary">Zamknij</button>
+      </div>
+    </div>
+  </div>
+</div>

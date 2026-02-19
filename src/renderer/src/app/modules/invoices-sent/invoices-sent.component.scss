@@ -1,0 +1,605 @@
+@import '../../../styles.scss';
+
+// ============================================
+// Invoices Container
+// ============================================
+
+.invoices-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// ============================================
+// Header with Refresh Button
+// ============================================
+
+.invoices-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-2xl;
+
+  h2 {
+    color: $primary-color;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .header-controls {
+    display: flex;
+    gap: $spacing-md;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .sort-controls {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  button {
+    padding: 8px 16px;
+    background: $primary-color;
+    color: white;
+    border: none;
+    border-radius: $radius-md;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all $transition-normal;
+
+    &:hover:not(:disabled) {
+      background: darken($primary-color, 10%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba($primary-color, 0.2);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &.sort-btn {
+      background: #888;
+      padding: 6px 12px;
+      font-size: 12px;
+      white-space: nowrap;
+
+      &.active {
+        background: $primary-color;
+        font-weight: 600;
+      }
+
+      &:hover {
+        background: darken(#888, 10%);
+      }
+
+      &.active:hover {
+        background: darken($primary-color, 10%);
+      }
+    }
+
+    &.view-toggle {
+      background: #666;
+      padding: 8px 14px;
+      font-size: 13px;
+
+      &:hover {
+        background: #555;
+      }
+    }
+  }
+}
+
+// ============================================
+// Error Message
+// ============================================
+
+.error-message {
+  background: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-lg;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    color: #d32f2f;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  button {
+    background: #ef5350;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background $transition-normal;
+
+    &:hover {
+      background: #e53935;
+    }
+  }
+}
+
+// ============================================
+// Loading Spinner
+// ============================================
+
+.loading-spinner {
+  text-align: center;
+  padding: 40px $spacing-xl;
+  color: $text-light;
+
+  p {
+    font-size: 16px;
+    margin: 0;
+  }
+}
+
+// ============================================
+// Invoices List Grid
+// ============================================
+
+.invoices-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $spacing-lg;
+  width: 100%;
+}
+
+// ============================================
+// Invoice Card
+// ============================================
+
+.invoice-card {
+  background: $secondary-color;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  transition: all $transition-normal;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    box-shadow: 0 8px 16px rgba(220, 20, 60, 0.15);
+    transform: translateY(-4px);
+    border-color: $primary-color;
+  }
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+
+  h3 {
+    margin: 0;
+    color: $primary-color;
+    font-size: 16px;
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    &.received {
+      background: #c8e6c9;
+      color: #2e7d32;
+    }
+
+    &.sent {
+      background: #bbdefb;
+      color: #1565c0;
+    }
+  }
+}
+
+.invoice-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: $text-light;
+    line-height: 1.5;
+
+    strong {
+      color: $text-color;
+      font-weight: 600;
+    }
+  }
+}
+
+.invoice-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: $spacing-md;
+  border-top: 1px solid $border-color;
+  gap: 8px;
+
+  .amount {
+    font-weight: 700;
+    color: #000;
+    font-size: 16px;
+    margin: 0;
+  }
+
+  button {
+    padding: 6px 12px;
+    background: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all $transition-normal;
+
+    &:hover {
+      background: darken($primary-color, 10%);
+    }
+
+    &.btn-xml {
+      background: #4CAF50;
+
+      &:hover {
+        background: darken(#4CAF50, 10%);
+      }
+    }
+  }
+}
+
+// ============================================
+// Empty State
+// ============================================
+
+.empty-state {
+  text-align: center;
+  padding: 60px $spacing-xl;
+  color: #bbb;
+  grid-column: 1 / -1;
+
+  p {
+    font-size: 16px;
+    margin: 0;
+  }
+}
+
+// ============================================
+// Invoices Table (List View)
+// ============================================
+
+.invoices-table-wrapper {
+  width: 100%;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.invoices-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: $secondary-color;
+
+  thead {
+    background: #f8f9fa;
+    border-bottom: 2px solid $border-color;
+
+    th {
+      padding: $spacing-md $spacing-lg;
+      text-align: left;
+      font-weight: 600;
+      color: $text-color;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid $border-color;
+      transition: background $transition-normal;
+      cursor: pointer;
+
+      &:hover {
+        background: #f5f5f5;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      td {
+        padding: $spacing-md $spacing-lg;
+        color: $text-light;
+        font-size: 14px;
+        line-height: 1.5;
+
+        &.invoice-number {
+          font-weight: 600;
+          color: #000;
+        }
+
+        &.buyer {
+          max-width: 200px;
+          word-break: break-word;
+        }
+
+        &.amount {
+          font-weight: 700;
+          color: #000;
+          text-align: right;
+        }
+
+        &.issue-date {
+          white-space: nowrap;
+        }
+
+        &.status {
+          text-align: center;
+        }
+
+        &.actions {
+          text-align: center;
+
+          .btn-action {
+            padding: 4px 8px;
+            background: $primary-color;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all $transition-normal;
+
+            &:hover {
+              background: darken($primary-color, 10%);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  &.received {
+    background: #c8e6c9;
+    color: #2e7d32;
+  }
+
+  &.sent {
+    background: #bbdefb;
+    color: #1565c0;
+  }
+}
+
+// ============================================
+// Responsive
+// ============================================
+
+@media (max-width: 1024px) {
+  .invoices-list {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: $spacing-md;
+  }
+}
+
+@media (max-width: 768px) {
+  .invoices-container {
+    h2 {
+      font-size: 20px;
+      margin-bottom: $spacing-xl;
+    }
+  }
+
+  .invoices-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-md;
+
+    .header-controls {
+      width: 100%;
+      flex-direction: column;
+
+      .sort-controls {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+
+  .invoices-list {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: $spacing-md;
+  }
+
+  .invoice-card {
+    padding: $spacing-md;
+  }
+
+  .invoices-table {
+    font-size: 12px;
+
+    th, td {
+      padding: $spacing-sm $spacing-md;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .invoices-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ============================================
+// Invoice Details Modal
+// ============================================
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-lg;
+  border-bottom: 1px solid $border-color;
+
+  h2 {
+    margin: 0;
+    color: $primary-color;
+    font-size: 20px;
+  }
+
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: $text-light;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color $transition-normal;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+.modal-body {
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    gap: $spacing-md;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid $border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      font-weight: 600;
+      color: $text-color;
+      min-width: 150px;
+    }
+
+    .value {
+      color: $text-light;
+      text-align: right;
+      flex: 1;
+
+      &.amount {
+        color: $primary-color;
+        font-weight: 700;
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+.modal-footer {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+  border-top: 1px solid $border-color;
+  justify-content: flex-end;
+
+  button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: $radius-md;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all $transition-normal;
+
+    &.btn-primary {
+      background: $primary-color;
+      color: white;
+
+      &:hover:not(:disabled) {
+        background: darken($primary-color, 10%);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    &.btn-secondary {
+      background: #f0f0f0;
+      color: $text-color;
+
+      &:hover {
+        background: #e0e0e0;
+      }
+    }
+  }
+}

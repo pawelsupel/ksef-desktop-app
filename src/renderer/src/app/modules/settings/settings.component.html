@@ -1,0 +1,74 @@
+<div class="settings-container">
+  <h2>Ustawienia</h2>
+
+  <div class="settings-section">
+    <h3>Konfiguracja Integracji z KSeF</h3>
+
+    <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()">
+      <div class="form-group">
+        <label>Metoda Autentykacji:</label>
+        <div class="auth-method-info">
+          <strong>Token KSeF (Aktualnie obsługiwane)</strong> ✓
+        </div>
+        <small>Certyfikat kwalifikowany będzie dodany w przyszłych wersjach</small>
+      </div>
+
+      <!-- Token Authentication Fields -->
+      <div *ngIf="authMethod === 'token'">
+        <div class="form-group">
+          <label for="token">Token KSeF:</label>
+          <input type="password" id="token" formControlName="token" placeholder="Pole będzie puste jeśli token jest zapisany - wklej nowy aby zmienić" />
+          <small>
+            ℹ️ Pole autoryzacyjne będzie puste jeśli token jest już zapisany (bezpieczeństwo)
+            <br/>Pobierz token z panelu: <a href="https://ksef.mf.gov.pl/" target="_blank">https://ksef.mf.gov.pl</a>
+            <br/>Format: referenceNumber|nipIdentifier|tokenValue
+            <br/>ℹ️ NIP zostanie automatycznie wyciągnięty z tokenu
+          </small>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="!settingsForm.valid || isSaving">
+          {{ isSaving ? 'Zapisywanie...' : 'Zapisz Ustawienia' }}
+        </button>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="error-message">
+        ✗ {{ errorMessage }}
+      </div>
+
+      <!-- Success Message -->
+      <div *ngIf="savedSuccessfully" class="success-message">
+        ✓ Ustawienia zostały zapisane pomyślnie
+      </div>
+
+      <!-- Connection Status -->
+      <div *ngIf="connectionStatus !== 'idle'" class="connection-status"
+           [ngClass]="{
+             'status-testing': connectionStatus === 'testing',
+             'status-success': connectionStatus === 'success',
+             'status-error': connectionStatus === 'error'
+           }">
+        <div *ngIf="connectionStatus === 'testing'">
+          🔄 {{ connectionMessage }}
+        </div>
+        <div *ngIf="connectionStatus === 'success'">
+          ✅ {{ connectionMessage }}
+        </div>
+        <div *ngIf="connectionStatus === 'error'">
+          ❌ {{ connectionMessage }}
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="settings-section">
+    <h3>Dokumentacja KSeF</h3>
+    <p>Aby uzyskać token lub certyfikat, odwiedź:</p>
+    <ul>
+      <li><a href="https://ksef.mf.gov.pl/web/ksef" target="_blank">Portal KSeF</a></li>
+      <li><a href="https://www.podatki.gov.pl/" target="_blank">Mój PIT</a></li>
+    </ul>
+  </div>
+</div>

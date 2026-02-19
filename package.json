@@ -1,0 +1,71 @@
+{
+  "name": "ksef-desktop",
+  "version": "1.0.3",
+  "description": "Aplikacja desktopowa do zarządzania fakturami z KSeF",
+  "main": "dist/main/index.js",
+  "private": true,
+  "scripts": {
+    "dev": "npm run build:main && concurrently --delay 5000 \"npm run dev:backend\" \"npm run dev:angular\" \"npm run dev:electron\"",
+    "dev:backend": "cd src/backend && npm run dev",
+    "dev:electron": "electron .",
+    "build:main": "tsc -p src/main/tsconfig.json --outDir dist/main",
+    "dev:angular": "cd src/renderer && npm start",
+    "build": "npm run build:renderer && npm run build:main && npm run copy:dist && npm run build:electron",
+    "build:renderer": "cd src/renderer && npm run build",
+    "copy:dist": "node scripts/copy-dist.js",
+    "build:electron": "electron-builder",
+    "prebuild:check": "node scripts/prebuild-sanitize.js",
+    "start": "electron .",
+    "test": "jest",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "electron-is-dev": "^2.0.0",
+    "unzipper": "^0.12.3"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0",
+    "electron": "^30.0.0",
+    "electron-builder": "^24.6.4",
+    "typescript": "^5.0.0"
+  },
+  "build": {
+    "appId": "com.ksef.desktop",
+    "productName": "KSeF Desktop",
+    "asar": false,
+    "files": [
+      "dist/main/**/*",
+      "dist/renderer/**/*",
+      "dist/backend/dist/**/*",
+      "dist/backend/package.json",
+      "node_modules/electron-is-dev/**/*",
+      "node_modules/unzipper/**/*",
+      "public/splash.html",
+      "package.json"
+    ],
+    "extraFiles": [
+      {
+        "from": "dist/backend/node_modules",
+        "to": "resources/app/dist/backend/node_modules",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "public/new.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "public/new.ico",
+      "installerHeaderIcon": "public/new.ico"
+    }
+  }
+}

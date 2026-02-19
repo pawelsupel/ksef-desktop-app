@@ -1,0 +1,340 @@
+// Import global variables
+@import '../styles.scss';
+
+// ============================================
+// App Container Layout
+// ============================================
+
+.app-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100%;
+  background-color: $bg-color;
+}
+
+// ============================================
+// Navbar Styles
+// ============================================
+
+.navbar {
+  background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 5%) 100%);
+  color: $secondary-color;
+  padding: $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  min-height: 70px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+  gap: $spacing-xl;
+  width: 280px;
+
+  // Brand section
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    margin-bottom: 100px;
+    gap: $spacing-lg;
+    flex-shrink: 0;
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+  }
+
+  .logo {
+    font-size: 28px;
+    line-height: 1;
+  }
+}
+
+// ============================================
+// Navigation Menu
+// ============================================
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: $spacing-lg;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  justify-content: flex-start;
+
+  &.nav-menu-bottom {
+    flex: 0;
+    justify-content: flex-end;
+  }
+
+  a.nav-tile {
+    color: $secondary-color;
+    text-decoration: none;
+    padding: $spacing-lg;
+    background: rgba($secondary-color, 0.1);
+    border: 1px solid rgba($secondary-color, 0.2);
+    border-radius: $radius-md;
+    transition: all $transition-normal;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba($secondary-color, 0.2);
+      border-color: rgba($secondary-color, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    &.active {
+      background: rgba($secondary-color, 0.25);
+      border-color: $secondary-color;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+  }
+}
+
+// ============================================
+// Copyright Footer
+// ============================================
+
+.copyright {
+  font-size: 11px;
+  color: rgba($secondary-color, 0.6);
+  text-align: center;
+  padding: $spacing-md 0 0 0;
+  margin-top: auto;
+  border-top: 1px solid rgba($secondary-color, 0.1);
+  flex-shrink: 0;
+
+  p {
+    margin: $spacing-md 0 0 0;
+
+    a {
+      color: rgba($secondary-color, 0.8);
+      text-decoration: none;
+      transition: color $transition-normal;
+
+      &:hover {
+        color: $secondary-color;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// ============================================
+// Main Content Area
+// ============================================
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: $spacing-xl;
+  background-color: $bg-light;
+}
+
+// ============================================
+// Sidebar Toggle Button
+// ============================================
+
+.sidebar-toggle {
+  position: absolute;
+  top: 8px;
+  right: $spacing-md;
+  background: rgba($secondary-color, 0.2);
+  border: 1px solid rgba($secondary-color, 0.3);
+  color: $secondary-color;
+  padding: 6px 10px;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all $transition-fast;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background: rgba($secondary-color, 0.3);
+    transform: scale(1.1);
+  }
+}
+
+// ============================================
+// Collapsed Sidebar State
+// ============================================
+
+.navbar {
+  transition: width $transition-normal;
+  position: relative;
+
+  &.collapsed {
+    width: 70px;
+    align-items: center;
+
+    .navbar-brand {
+      margin-bottom: $spacing-xl;
+      justify-content: center;
+
+      .logo {
+        font-size: 24px;
+        display: none; // Hide logo when sidebar is collapsed to prevent overlap with toggle button
+      }
+
+      h1 {
+        display: none; // Title already hidden with *ngIf
+      }
+    }
+
+    .nav-menu {
+      gap: $spacing-sm;
+
+      a.nav-tile {
+        padding: $spacing-md;
+        text-align: center;
+        justify-content: center;
+
+        .icon {
+          font-size: 20px;
+        }
+      }
+    }
+
+    .copyright {
+      display: none;
+    }
+  }
+}
+
+.nav-tile {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  .icon {
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .label {
+    flex: 1;
+  }
+}
+
+// ============================================
+// Responsive Design
+// ============================================
+
+@media (max-width: 1024px) {
+  .navbar {
+    padding: $spacing-lg;
+    min-height: 65px;
+    width: 240px;
+  }
+
+  .nav-menu {
+    gap: $spacing-md;
+  }
+
+  a.nav-tile {
+    padding: $spacing-md;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .navbar {
+    flex-direction: row;
+    gap: $spacing-md;
+    align-items: center;
+    min-height: auto;
+    padding: $spacing-md;
+    width: auto;
+    justify-content: flex-start;
+  }
+
+  .navbar-brand {
+    width: auto;
+    margin-bottom: 0;
+
+    h1 {
+      font-size: 16px;
+    }
+  }
+
+  .nav-menu {
+    flex-direction: row;
+    flex: 1;
+    gap: $spacing-sm;
+    justify-content: flex-start;
+
+    &.nav-menu-bottom {
+      flex: 0;
+      justify-content: flex-end;
+    }
+
+    a.nav-tile {
+      padding: $spacing-sm $spacing-md;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+  }
+
+  .content {
+    padding: $spacing-lg;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: $spacing-sm;
+    flex-wrap: wrap;
+  }
+
+  .navbar-brand {
+    flex-basis: 100%;
+
+    h1 {
+      font-size: 14px;
+    }
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .nav-menu {
+    flex-basis: 100%;
+    gap: $spacing-xs;
+
+    a.nav-tile {
+      font-size: 11px;
+      padding: $spacing-xs $spacing-sm;
+    }
+
+    &.nav-menu-bottom {
+      flex-basis: 100%;
+    }
+  }
+
+  .content {
+    padding: $spacing-md;
+  }
+}

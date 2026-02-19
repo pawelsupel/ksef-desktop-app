@@ -1,0 +1,43 @@
+<div class="app-container">
+  <nav class="navbar" [class.collapsed]="sidebarCollapsed">
+    <button class="sidebar-toggle" (click)="toggleSidebar()" title="Zwiń/Rozwiń menu">
+      {{ sidebarCollapsed ? '→' : '←' }}
+    </button>
+
+    <div class="navbar-brand">
+      <span class="logo">📄</span>
+      <h1 *ngIf="!sidebarCollapsed">KSeF Desktop</h1>
+    </div>
+
+    <ul class="nav-menu">
+      <!-- Portal KSeF hidden for now -->
+      <!-- <li><a routerLink="/ksef-portal" routerLinkActive="active" class="nav-tile">📊 Portal KSeF</a></li> -->
+      <li><a routerLink="/invoices-received" routerLinkActive="active" class="nav-tile">
+        <span class="icon">📥</span>
+        <span class="label" *ngIf="!sidebarCollapsed">Faktury Odebrane</span>
+      </a></li>
+      <li><a routerLink="/invoices-sent" routerLinkActive="active" class="nav-tile">
+        <span class="icon">📤</span>
+        <span class="label" *ngIf="!sidebarCollapsed">Faktury Wysłane</span>
+      </a></li>
+    </ul>
+
+    <ul class="nav-menu nav-menu-bottom">
+      <li><a routerLink="/settings" routerLinkActive="active" class="nav-tile">
+        <span class="icon">⚙️</span>
+        <span class="label" *ngIf="!sidebarCollapsed">Ustawienia</span>
+      </a></li>
+    </ul>
+
+    <div class="copyright" *ngIf="!sidebarCollapsed">
+      <p>
+        Original code © 2026 Dawid Namyślak
+        Modifications and maintenance © 2026 PIK Systems
+      </p>
+    </div>
+  </nav>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

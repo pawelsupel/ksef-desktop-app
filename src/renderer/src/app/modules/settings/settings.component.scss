@@ -1,0 +1,245 @@
+@import '../../../styles.scss';
+
+// ============================================
+// Settings Container
+// ============================================
+
+.settings-container {
+  max-width: 600px;
+  margin: 0 auto;
+
+  h2 {
+    color: $primary-color;
+    margin-bottom: $spacing-2xl;
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+// ============================================
+// Settings Sections
+// ============================================
+
+.settings-section {
+  background: $secondary-color;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-xl;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  h3 {
+    color: $primary-color;
+    margin-top: 0;
+    margin-bottom: $spacing-lg;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  // List styling
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    padding: $spacing-md 0;
+    border-bottom: 1px solid $border-color;
+    font-size: 14px;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  a {
+    color: $primary-color;
+    text-decoration: underline;
+    font-weight: 500;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  p {
+    color: $text-light;
+    margin: $spacing-md 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+// ============================================
+// Form Styles
+// ============================================
+
+.form-group {
+  margin-bottom: $spacing-lg;
+
+  label {
+    display: block;
+    margin-bottom: $spacing-sm;
+    font-weight: 600;
+    color: $text-color;
+    font-size: 14px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: $spacing-md;
+    border: 1px solid $border-color;
+    border-radius: $radius-sm;
+    font-size: 14px;
+    font-family: $font-family;
+    background-color: $bg-light;
+    transition: all $transition-fast;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.1);
+      background-color: $secondary-color;
+    }
+
+    &:disabled {
+      background-color: #f0f0f0;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  small {
+    display: block;
+    margin-top: $spacing-sm;
+    color: $text-light;
+    font-size: 12px;
+    line-height: 1.5;
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// ============================================
+// Form Actions
+// ============================================
+
+.form-actions {
+  margin-top: $spacing-xl;
+  display: flex;
+  gap: $spacing-md;
+
+  button {
+    flex: 1;
+    min-height: 40px;
+    font-weight: 600;
+
+    &:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  }
+}
+
+// ============================================
+// Messages (Success & Error)
+// ============================================
+
+.success-message {
+  background-color: $success-bg;
+  color: $success-text;
+  padding: $spacing-md;
+  border-radius: $radius-sm;
+  margin-top: $spacing-lg;
+  border: 1px solid $success-border;
+  font-weight: 500;
+  animation: slideIn 0.3s ease;
+}
+
+.error-message {
+  background-color: $error-bg;
+  color: $error-text;
+  padding: $spacing-md;
+  border-radius: $radius-sm;
+  margin-top: $spacing-lg;
+  border: 1px solid $error-border;
+  font-weight: 500;
+  animation: slideIn 0.3s ease;
+}
+
+// ============================================
+// Connection Status
+// ============================================
+
+.connection-status {
+  padding: $spacing-md;
+  border-radius: $radius-sm;
+  margin-top: $spacing-lg;
+  font-weight: 500;
+  animation: slideIn 0.3s ease;
+
+  &.status-testing {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border: 1px solid #90caf9;
+  }
+
+  &.status-success {
+    background-color: $success-bg;
+    color: $success-text;
+    border: 1px solid $success-border;
+  }
+
+  &.status-error {
+    background-color: $error-bg;
+    color: $error-text;
+    border: 1px solid $error-border;
+  }
+}
+
+// ============================================
+// Animations
+// ============================================
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ============================================
+// Responsive
+// ============================================
+
+@media (max-width: 768px) {
+  .settings-container {
+    max-width: 100%;
+  }
+
+  .settings-section {
+    padding: $spacing-lg;
+  }
+
+  .form-actions {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+}

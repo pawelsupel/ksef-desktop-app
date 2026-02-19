@@ -1,0 +1,51 @@
+<div class="ksef-portal-container">
+  <!-- Error State -->
+  <div *ngIf="error" class="error-state">
+    <div class="error-content">
+      <h2>⚠️ Błąd</h2>
+      <p>{{ error }}</p>
+      <button class="btn-primary" routerLink="/settings">
+        Przejdź do Ustawień
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="!isLoggedIn && !error" class="loading-state">
+    <div class="spinner"></div>
+    <p>⏳ Ładowanie portalu KSeF...</p>
+  </div>
+
+  <!-- Portal Container -->
+  <div *ngIf="isLoggedIn" class="portal-wrapper">
+    <!-- Toolbar -->
+    <div class="portal-toolbar">
+      <div class="toolbar-title">📊 Portal KSeF</div>
+      <button
+        class="btn-refresh"
+        (click)="refresh()"
+        title="Odśwież portal">
+        🔄 Odśwież
+      </button>
+    </div>
+
+    <!-- iFrame -->
+    <div class="iframe-container" [class.loading]="!isLoaded">
+      <iframe
+        #kSefFrame
+        [src]="kSefUrl | sanitize"
+        (load)="onIframeLoaded()"
+        (error)="onIframeError()"
+        class="ksef-iframe"
+        title="Portal KSeF"
+        allow="payment">
+      </iframe>
+
+      <!-- Loading Overlay -->
+      <div *ngIf="!isLoaded" class="iframe-loading">
+        <div class="spinner-small"></div>
+        <p>⏳ Załadowanie portalu KSeF...</p>
+      </div>
+    </div>
+  </div>
+</div>
